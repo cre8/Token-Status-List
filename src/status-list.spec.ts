@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest';
 import { StatusList } from './main';
-import { BitsPerStatus } from './status-list';
+import { BitsPerStatus } from './types';
 
 describe('StatusListManager', () => {
   const listLength = 10000;

@@ -1,8 +1,10 @@
 import { JWTHeaderParameters, JWTPayload, SignJWT, decodeJwt } from 'jose';
-import { StatusList } from './status-list';
-import { StatusListEntry } from './types';
-import { JWTwithStatusListPayload } from './types';
-import { StatusListJWTPayload } from './types';
+import { StatusList } from './status-list.js';
+import {
+  JWTwithStatusListPayload,
+  StatusListEntry,
+  StatusListJWTPayload,
+} from './types.js';
 
 /**
  * Create an unsigned JWT with a status list.
