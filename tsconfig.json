@@ -11,6 +11,7 @@
     "strict": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "declaration": true,
     "lib": ["es2016", "dom"]
   },
   "exclude": ["**/*.spec.ts"]
