@@ -6,7 +6,7 @@ describe('StatusListManager', () => {
   const listLength = 10000;
 
   it('test from the example with 1 bit status', () => {
-    const status = [];
+    const status: number[] = [];
     status[0] = 1;
     status[1] = 0;
     status[2] = 0;
@@ -33,7 +33,7 @@ describe('StatusListManager', () => {
   });
 
   it('test from the example with 2 bit status', () => {
-    const status = [];
+    const status: number[] = [];
     status[0] = 1;
     status[1] = 2;
     status[2] = 0;
@@ -69,7 +69,7 @@ describe('StatusListManager', () => {
       length: number,
       bitsPerStatus: BitsPerStatus
     ): number[] {
-      const list = [];
+      const list: number[] = [];
       for (let i = 0; i < length; i++) {
         list.push(Math.floor(Math.random() * 2 ** bitsPerStatus));
       }

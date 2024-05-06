@@ -10,7 +10,7 @@ export interface StatusListEntry {
 }
 
 /**
- * Payload for a JWT referecing a status list.
+ * Payload for a JWT
  */
 export interface JWTwithStatusListPayload extends JWTPayload {
   status: {
