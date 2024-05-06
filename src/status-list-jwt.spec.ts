@@ -1,10 +1,10 @@
 // statuslist-jwt.spec.ts
 import {
-  JWTwithStatusListPayload,
   createUnsignedJWT,
   getListFromStatusListJWT,
   getStatusListFromJWT,
 } from './status-list-jwt';
+import { JWTwithStatusListPayload } from './types';
 import { StatusList } from './status-list';
 import {
   JWTPayload,

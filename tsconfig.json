@@ -12,5 +12,6 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "lib": ["es2016", "dom"]
-  }
+  },
+  "exclude": ["**/*.spec.ts"]
 }

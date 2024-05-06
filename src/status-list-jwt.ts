@@ -1,26 +1,8 @@
 import { JWTHeaderParameters, JWTPayload, SignJWT, decodeJwt } from 'jose';
-import { BitsPerStatus, StatusList } from './status-list';
-
-export interface StatusListEntry {
-  idx: number;
-  uri: string;
-}
-
-export interface JWTwithStatusListPayload extends JWTPayload {
-  status: {
-    status_list: StatusListEntry;
-  };
-}
-
-/**
- * Payload for a JWT with a status list.
- */
-interface StatusListJWTPayload extends JWTPayload {
-  status_list: {
-    bits: BitsPerStatus;
-    lst: string;
-  };
-}
+import { StatusList } from './status-list';
+import { StatusListEntry } from './types';
+import { JWTwithStatusListPayload } from './types';
+import { StatusListJWTPayload } from './types';
 
 /**
  * Create an unsigned JWT with a status list.

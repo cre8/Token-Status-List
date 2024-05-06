@@ -5,17 +5,27 @@
   "type": "module",
   "main": "dist/main.js",
   "scripts": {
+    "prebuild": "rimraf ./dist",
     "build": "tsc",
     "start": "node dist/main.js",
     "test": "vitest --coverage"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "sd-jwt-vc",
+    "status-list",
+    "sd-jwt"
+  ],
+  "author": "Mirko Mollik <mirkomollik@gmail.com>",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^20.12.8",
     "@types/pako": "^2.0.3",
     "@vitest/coverage-v8": "^1.6.0",
+    "rimraf": "^5.0.5",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
