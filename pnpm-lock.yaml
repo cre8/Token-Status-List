@@ -11,9 +11,6 @@ importers:
       base64url:
         specifier: ^3.0.1
         version: 3.0.1
-      jose:
-        specifier: ^5.2.4
-        version: 5.2.4
       pako:
         specifier: ^2.1.0
         version: 2.1.0
@@ -27,6 +24,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^1.6.0
         version: 1.6.0(vitest@1.6.0(@types/node@20.12.10))
+      jose:
+        specifier: ^5.2.4
+        version: 5.2.4
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5

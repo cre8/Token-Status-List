@@ -1,6 +1,6 @@
 {
   "name": "jwt-status-list",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "type": "module",
   "main": "dist/main.js",
@@ -35,13 +35,13 @@
     "@types/node": "^20.12.10",
     "@types/pako": "^2.0.3",
     "@vitest/coverage-v8": "^1.6.0",
+    "jose": "^5.2.4",
     "rimraf": "^5.0.5",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
   "dependencies": {
     "base64url": "^3.0.1",
-    "jose": "^5.2.4",
     "pako": "^2.1.0"
   }
 }

@@ -1,5 +1,3 @@
-import { JWTPayload } from 'jose';
-
 /**
  * Reference to a status list entry.
  */
@@ -31,3 +29,23 @@ export interface StatusListJWTPayload extends JWTPayload {
  * BitsPerStatus type.
  */
 export type BitsPerStatus = 1 | 2 | 4 | 8;
+
+/**
+ * Payload for a JWT.
+ */
+export type JWTPayload = {
+  iss: string;
+  sub: string;
+  iat: number;
+  exp?: number;
+  ttl?: number;
+  [key: string]: unknown;
+};
+
+/**
+ * Header parameters for a JWT.
+ */
+export type JWTHeaderParameters = {
+  alg: string;
+  [key: string]: unknown;
+};

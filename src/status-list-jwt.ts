@@ -1,18 +1,31 @@
-import { JWTHeaderParameters, JWTPayload, SignJWT, decodeJwt } from 'jose';
 import { StatusList } from './status-list.js';
+import { JWTHeaderParameters } from './types.js';
+import { JWTPayload } from './types.js';
 import {
   JWTwithStatusListPayload,
   StatusListEntry,
   StatusListJWTPayload,
 } from './types.js';
+import base64Url from 'base64url';
 
 /**
- * Create an unsigned JWT with a status list.
+ * Decode a JWT and return the payload.
+ * @param jwt JWT token in compact JWS serialization.
+ * @returns Payload of the JWT.
+ */
+function decodeJwt<T>(jwt: string): T {
+  const parts = jwt.split('.');
+  return JSON.parse(base64Url.decode(parts[1]));
+}
+
+/**
+ * Adds the status list to the payload and header of a JWT.
  * @param list
  * @param payload
  * @param header
+ * @returns The header and payload with the status list added.
  */
-export function createUnsignedJWT(
+export function createHeaderAndPayload(
   list: StatusList,
   payload: JWTPayload,
   header: JWTHeaderParameters
@@ -30,13 +43,12 @@ export function createUnsignedJWT(
   }
   //exp and tll are optional. We will not validate the business logic of the values like exp > iat etc.
 
-  return new SignJWT({
-    ...payload,
-    status_list: {
-      bits: list.getBitsPerStatus(),
-      lst: list.compressStatusList(),
-    },
-  }).setProtectedHeader({ ...header, typ: 'statuslist+jwt' });
+  header.typ = 'statuslist+jwt';
+  payload.status_list = {
+    bits: list.getBitsPerStatus(),
+    lst: list.compressStatusList(),
+  };
+  return { header, payload };
 }
 
 /**

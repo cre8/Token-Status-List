@@ -1,22 +1,19 @@
-// statuslist-jwt.spec.ts
 import {
-  createUnsignedJWT,
+  createHeaderAndPayload,
   getListFromStatusListJWT,
   getStatusListFromJWT,
 } from './status-list-jwt';
-import { JWTwithStatusListPayload } from './types';
-import { StatusList } from './status-list';
 import {
-  JWTPayload,
   JWTHeaderParameters,
-  jwtVerify,
-  KeyLike,
-  SignJWT,
-} from 'jose';
+  JWTPayload,
+  JWTwithStatusListPayload,
+} from './types';
+import { StatusList } from './status-list';
+import { jwtVerify, KeyLike, SignJWT } from 'jose';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { generateKeyPairSync } from 'node:crypto';
 
-describe('createUnsignedJWT', () => {
+describe('JWTStatusList', () => {
   let publicKey: KeyLike;
   let privateKey: KeyLike;
 
@@ -29,8 +26,8 @@ describe('createUnsignedJWT', () => {
     privateKey = keyPair.privateKey;
   });
 
-  it('should create an unsigned JWT with a status list', async () => {
-    const list = new StatusList([1, 0, 1, 1, 1], 1);
+  it('should create a JWT with a status list', async () => {
+    const statusList = new StatusList([1, 0, 1, 1, 1], 1);
     const iss = 'https://example.com';
     const payload: JWTPayload = {
       iss,
@@ -39,15 +36,16 @@ describe('createUnsignedJWT', () => {
     };
     const header: JWTHeaderParameters = { alg: 'ES256' };
 
-    const jwt = createUnsignedJWT(list, payload, header);
+    const values = createHeaderAndPayload(statusList, payload, header);
 
-    // Sign the JWT with the private key
-    const signedJwt = await jwt.sign(privateKey);
+    const jwt = await new SignJWT(values.payload)
+      .setProtectedHeader(values.header)
+      .sign(privateKey);
     // Verify the signed JWT with the public key
-    const verified = await jwtVerify(signedJwt, publicKey);
+    const verified = await jwtVerify(jwt, publicKey);
     expect(verified.payload.status_list).toEqual({
-      bits: list.getBitsPerStatus(),
-      lst: list.compressStatusList(),
+      bits: statusList.getBitsPerStatus(),
+      lst: statusList.compressStatusList(),
     });
     expect(verified.protectedHeader.typ).toBe('statuslist+jwt');
   });
@@ -63,9 +61,12 @@ describe('createUnsignedJWT', () => {
     };
     const header: JWTHeaderParameters = { alg: 'ES256' };
 
-    const jwt = await createUnsignedJWT(statusList, payload, header).sign(
-      privateKey
-    );
+    const values = createHeaderAndPayload(statusList, payload, header);
+
+    const jwt = await new SignJWT(values.payload)
+      .setProtectedHeader(values.header)
+      .sign(privateKey);
+
     const extractedList = getListFromStatusListJWT(jwt);
     for (let i = 0; i < list.length; i++) {
       expect(extractedList.getStatus(i)).toBe(list[i]);
@@ -77,33 +78,36 @@ describe('createUnsignedJWT', () => {
     const statusList = new StatusList(list, 2);
     const iss = 'https://example.com';
     const header: JWTHeaderParameters = { alg: 'ES256' };
-    let payload: JWTPayload = {
+    let payload: any = {
       sub: `${iss}/statuslist/1`,
       iat: new Date().getTime() / 1000,
     };
     expect(() => {
-      createUnsignedJWT(statusList, payload, header).sign(privateKey);
+      createHeaderAndPayload(statusList, payload as JWTPayload, header);
     }).toThrow('iss field is required');
 
     payload = {
       iss,
       iat: new Date().getTime() / 1000,
     };
-    expect(() => {
-      createUnsignedJWT(statusList, payload, header).sign(privateKey);
-    }).toThrow('sub field is required');
+    expect(() => createHeaderAndPayload(statusList, payload, header)).toThrow(
+      'sub field is required'
+    );
 
     payload = {
       iss,
       sub: `${iss}/statuslist/1`,
     };
-    expect(() => {
-      createUnsignedJWT(statusList, payload, header).sign(privateKey);
-    }).toThrow('iat field is required');
+    expect(() => createHeaderAndPayload(statusList, payload, header)).toThrow(
+      'iat field is required'
+    );
   });
 
   it('should get the status entry from a JWT', async () => {
     const payload: JWTwithStatusListPayload = {
+      iss: 'https://example.com',
+      sub: 'https://example.com/status/1',
+      iat: new Date().getTime() / 1000,
       status: {
         status_list: {
           idx: 0,

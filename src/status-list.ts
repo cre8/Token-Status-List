@@ -92,9 +92,8 @@ export class StatusList {
     let decompressed;
     try {
       decompressed = inflate(decoded);
-    } catch (err) {
-      console.log(err);
-      throw new Error('Decompression failed');
+    } catch (err: any) {
+      throw new Error(`Decompression failed: ${err.message}`);
     }
     const statusList = this.decodeStatusList(decompressed, bitsPerStatus);
     return new StatusList(statusList, bitsPerStatus);

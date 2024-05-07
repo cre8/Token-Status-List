@@ -2,7 +2,7 @@ import { describe, expect, it, test } from 'vitest';
 import { StatusList } from './main';
 import { BitsPerStatus } from './types';
 
-describe('StatusListManager', () => {
+describe('StatusList', () => {
   const listLength = 10000;
 
   it('test from the example with 1 bit status', () => {
@@ -49,7 +49,6 @@ describe('StatusListManager', () => {
     const manager = new StatusList(status, 2);
     const encoded = manager.compressStatusList();
     expect(encoded).toBe('eNo76fITAAPfAgc');
-    console.log(encoded);
     const l = StatusList.decompressStatusList(encoded, 2);
     for (let i = 0; i < status.length; i++) {
       expect(l.getStatus(i)).toBe(status[i]);
